@@ -1,8 +1,10 @@
 import { Image } from "react-native";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
-
-import { Container, Header } from "./styles";
+import { Text } from "react-native";
+import { Container, Header, Meals, Title } from "./styles";
+import { Percentage } from "../../components/Percentage";
+import { Button } from "../../components/Button";
 
 export function Home() {
   return (
@@ -11,6 +13,11 @@ export function Home() {
         <Image source={logo} />
         <Image source={avatar} />
       </Header>
+      <Percentage />
+      <Meals>
+        <Title>Refeições</Title>
+        <Button title="Nova refeição" type="Secondary" />
+      </Meals>
     </Container>
   );
 }
