@@ -10,6 +10,7 @@ import { useTheme } from "styled-components/native";
 import { useState } from "react";
 import { MealCard } from "../../components/MealCard";
 import { DateOfMeals } from "../../components/DateOfMeals";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 type MealsProps = {
   date: string;
@@ -22,6 +23,7 @@ type MealsProps = {
 
 export function Home() {
   const { COLORS } = useTheme();
+  const navigation = useNavigation();
   const [meals, setMeals] = useState<MealsProps>([
     {
       date: "10.04.23",
@@ -88,6 +90,7 @@ export function Home() {
           title="Nova refeição"
           type="Primary"
           icon={<Plus size={18} color={COLORS.WHITE} />}
+          onPress={() => navigation.navigate("new")}
         />
         <MealsList>
           <SectionList
@@ -106,6 +109,16 @@ export function Home() {
             showsVerticalScrollIndicator={false}
             SectionSeparatorComponent={() => <View style={{ height: 8 }} />}
             ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+            ListEmptyComponent={() => (
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text>Registe a sua primeira refeição</Text>
+              </View>
+            )}
           />
         </MealsList>
       </Meals>
