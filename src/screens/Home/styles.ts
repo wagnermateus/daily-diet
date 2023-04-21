@@ -13,6 +13,7 @@ export const Header = styled.View`
 `;
 
 export const Meals = styled.View`
+  flex: 1;
   margin-top: 40px;
 `;
 
@@ -22,4 +23,9 @@ export const Title = styled.Text`
     font-size: ${theme.FONT_SIZE.MD}px;
     font-family: ${theme.FONT_FAMILY.REGULAR};
   `}
+`;
+
+export const MealsList = styled.View`
+  flex: 1;
+  margin-top: 32px;
 `;
