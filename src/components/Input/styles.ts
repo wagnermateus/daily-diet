@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components/native";
+
 type Props = {
   height: number;
   width?: number;
@@ -15,6 +16,9 @@ export const Input = styled.TextInput<Props>`
   padding: 14px;
   border: 1px solid ${({ theme }) => theme.COLORS.gray_500};
   border-radius: 6px;
+
+  color: ${({ theme }) => theme.COLORS.gray_100};
+  font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
 `;
 
 export const Label = styled.Text`
