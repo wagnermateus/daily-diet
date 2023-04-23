@@ -1,4 +1,4 @@
-import { Image, SectionList, View, Text, SafeAreaView } from "react-native";
+import { Image, SectionList, View, Text } from "react-native";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
 
@@ -10,7 +10,7 @@ import { useTheme } from "styled-components/native";
 import { useState } from "react";
 import { MealCard } from "../../components/MealCard";
 import { DateOfMeals } from "../../components/DateOfMeals";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 type MealsProps = {
   date: string;
@@ -90,7 +90,7 @@ export function Home() {
           title="Nova refeição"
           type="Primary"
           icon={<Plus size={18} color={COLORS.WHITE} />}
-          onPress={() => navigation.navigate("new")}
+          onPress={() => navigation.navigate("new/edit")}
         />
         <MealsList>
           <SectionList

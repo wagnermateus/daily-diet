@@ -16,7 +16,7 @@ export function Input({ label, height, width, ...rest }: Props) {
   return (
     <Container {...rest}>
       <Label>{label}</Label>
-      <InputComponent height={height} width={width} />
+      <InputComponent height={height} width={width} {...rest} />
     </Container>
   );
 }
