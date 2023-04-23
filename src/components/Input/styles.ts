@@ -5,7 +5,9 @@ type Props = {
 };
 
 export type InputStyleProps = Props;
-export const Container = styled.View``;
+export const Container = styled.View`
+  gap: 4px;
+`;
 
 export const Input = styled.TextInput<Props>`
   width: ${({ width }) => (width ? `${width}px` : "100%")};

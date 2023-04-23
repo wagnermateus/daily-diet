@@ -90,7 +90,7 @@ export function Home() {
           title="Nova refeição"
           type="Primary"
           icon={<Plus size={18} color={COLORS.WHITE} />}
-          onPress={() => navigation.navigate("new/edit")}
+          onPress={() => navigation.navigate("describe")}
         />
         <MealsList>
           <SectionList
