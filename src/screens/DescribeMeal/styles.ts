@@ -1,10 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled, { css } from "styled-components/native";
 
-type Props = {
-  isOnTheDiet: boolean | undefined;
-};
-
 export const Container = styled(SafeAreaView)`
   flex: 1;
   background-color: ${({ theme }) => theme.COLORS.gray_500};
@@ -47,13 +43,4 @@ export const RadioButtonLabel = styled.Text`
     font-size: ${theme.FONT_SIZE.SM}px;
   `}
   margin-bottom: 8px;
-`;
-
-export const StatusBall = styled.View<Props>`
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-
-  background-color: ${({ theme, isOnTheDiet }) =>
-    isOnTheDiet ? theme.COLORS.green_dark : theme.COLORS.red_dark};
 `;

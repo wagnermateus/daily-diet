@@ -115,6 +115,7 @@ export function Home() {
                 hour={item.hour}
                 isOnTheDiet={item.isOnTheDiet}
                 meal={item.name}
+                onPress={() => navigation.navigate("meal", { name: item.name })}
               />
             )}
             renderSectionHeader={({ section: { date } }) => (

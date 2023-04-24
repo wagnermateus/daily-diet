@@ -7,7 +7,6 @@ import {
   RadioButton,
   RadioButtonLabel,
   RadioButtons,
-  StatusBall,
 } from "./styles";
 import { useState } from "react";
 import DateTimePicker, {
@@ -19,6 +18,7 @@ import { Button } from "../../components/Button";
 import { Text } from "react-native";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBall } from "../../components/StatusBall";
 
 export function DescribeMeal() {
   const [date, setDate] = useState(new Date());
