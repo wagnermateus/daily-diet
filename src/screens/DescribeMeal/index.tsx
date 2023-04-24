@@ -18,6 +18,7 @@ import { MealHeader } from "../../components/MealHeader";
 import { Button } from "../../components/Button";
 import { Text } from "react-native";
 import { useTheme } from "styled-components/native";
+import { useNavigation } from "@react-navigation/native";
 
 export function DescribeMeal() {
   const [date, setDate] = useState(new Date());
@@ -31,6 +32,7 @@ export function DescribeMeal() {
   const [isOnTheDiet, setIsOnTheDiet] = useState<boolean>();
 
   const { COLORS } = useTheme();
+  const navigation = useNavigation();
 
   function toggleDatePicker() {
     setShowDatePicker(!showDatePicker);
@@ -134,7 +136,10 @@ export function DescribeMeal() {
               </RadioButton>
             </RadioButtons>
           </View>
-          <Button title="Cadastrar refeição" />
+          <Button
+            title="Cadastrar refeição"
+            onPress={() => navigation.navigate("feedback")}
+          />
         </Content>
       </Container>
     </ScrollView>
