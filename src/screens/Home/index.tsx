@@ -2,7 +2,15 @@ import { Image, SectionList, View, Text } from "react-native";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
 
-import { Container, Header, Meals, MealsList, Title } from "./styles";
+import {
+  Container,
+  Header,
+  Icon,
+  Meals,
+  MealsList,
+  StatisticsCard,
+  Title,
+} from "./styles";
 import { Percentage } from "../../components/Percentage";
 import { Button } from "../../components/Button";
 import { Plus } from "phosphor-react-native";
@@ -76,14 +84,17 @@ export function Home() {
       ],
     },
   ]);
-
+  const [isOnTheDiet, setIsOnTheDiet] = useState(true);
   return (
     <Container>
       <Header>
         <Image source={logo} />
         <Image source={avatar} />
       </Header>
-      <Percentage />
+      <StatisticsCard isOnTheDiet={isOnTheDiet}>
+        <Icon color={isOnTheDiet ? COLORS.green_dark : COLORS.red_dark} />
+        <Percentage percentageValue={98.87} />
+      </StatisticsCard>
       <Meals>
         <Title>Refeições</Title>
         <Button

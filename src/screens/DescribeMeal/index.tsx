@@ -123,7 +123,7 @@ export function DescribeMeal() {
               <RadioButton
                 onPress={() => setIsOnTheDiet(false)}
                 style={
-                  !isOnTheDiet && {
+                  isOnTheDiet === false && {
                     backgroundColor: COLORS.red_light,
                     borderColor: COLORS.red_dark,
                   }

@@ -1,16 +1,14 @@
-import { useState } from "react";
-import { Container, Icon, Value, ValueText } from "./styles";
-import { useTheme } from "styled-components";
+import { Container, Subtitle, Title } from "./styles";
 
-export function Percentage() {
-  const [isOnTheDiet, setIsOnTheDiet] = useState(true);
+type Props = {
+  percentageValue: number;
+};
 
-  const { COLORS } = useTheme();
+export function Percentage({ percentageValue }: Props) {
   return (
-    <Container isOnTheDiet={isOnTheDiet}>
-      <Icon color={isOnTheDiet ? COLORS.green_dark : COLORS.red_dark} />
-      <Value>90,86%</Value>
-      <ValueText>das refeições dentro da dieta</ValueText>
+    <Container>
+      <Title>{percentageValue}%</Title>
+      <Subtitle>das refeições dentro da dieta</Subtitle>
     </Container>
   );
 }

@@ -1,5 +1,10 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled, { css } from "styled-components/native";
+import { ArrowUpRight } from "phosphor-react-native";
+
+type Props = {
+  isOnTheDiet: boolean;
+};
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
@@ -10,6 +15,20 @@ export const Container = styled(SafeAreaView)`
 export const Header = styled.View`
   flex-direction: row;
   justify-content: space-between;
+`;
+export const StatisticsCard = styled.TouchableOpacity<Props>`
+  margin-top: 33px;
+  width: 100%;
+  padding: 20px 14px;
+  border-radius: 8px;
+
+  background-color: ${({ theme, isOnTheDiet }) =>
+    isOnTheDiet ? theme.COLORS.green_light : theme.COLORS.red_light};
+`;
+export const Icon = styled(ArrowUpRight).attrs(({ theme }) => ({
+  size: 24,
+}))`
+  align-self: flex-end;
 `;
 
 export const Meals = styled.View`
