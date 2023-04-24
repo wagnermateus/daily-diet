@@ -22,7 +22,6 @@ export const DateTime = styled.View`
 export const RadioButtons = styled.View`
   flex-direction: row;
   gap: 8px;
-  margin-bottom: 140px;
 `;
 export const RadioButton = styled.Pressable`
   width: 152px;
