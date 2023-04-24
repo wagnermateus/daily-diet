@@ -25,9 +25,9 @@ export const StatisticsCard = styled.TouchableOpacity<Props>`
   background-color: ${({ theme, isOnTheDiet }) =>
     isOnTheDiet ? theme.COLORS.green_light : theme.COLORS.red_light};
 `;
-export const Icon = styled(ArrowUpRight).attrs(({ theme }) => ({
+export const Icon = styled(ArrowUpRight).attrs({
   size: 24,
-}))`
+})`
   align-self: flex-end;
 `;
 

@@ -91,7 +91,10 @@ export function Home() {
         <Image source={logo} />
         <Image source={avatar} />
       </Header>
-      <StatisticsCard isOnTheDiet={isOnTheDiet}>
+      <StatisticsCard
+        isOnTheDiet={isOnTheDiet}
+        onPress={() => navigation.navigate("statistics")}
+      >
         <Icon color={isOnTheDiet ? COLORS.green_dark : COLORS.red_dark} />
         <Percentage percentageValue={98.87} />
       </StatisticsCard>

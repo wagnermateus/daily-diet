@@ -1,5 +1,24 @@
-import { Container } from "./styles";
+import { TouchableOpacity } from "react-native";
+import { Percentage } from "../../components/Percentage";
+import { Container, Content, Header, Icon } from "./styles";
+import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "styled-components/native";
+import { useState } from "react";
 
 export function Statistics() {
-  return <Container></Container>;
+  const navigation = useNavigation();
+  const { COLORS } = useTheme();
+
+  const [isOnTheDiet, setIsOnTheDiet] = useState(true);
+  return (
+    <Container isOnTheDiet={isOnTheDiet}>
+      <Header>
+        <TouchableOpacity onPress={() => navigation.navigate("home")}>
+          <Icon color={isOnTheDiet ? COLORS.green_dark : COLORS.red_dark} />
+        </TouchableOpacity>
+        <Percentage percentageValue={98.87} />
+      </Header>
+      <Content></Content>
+    </Container>
+  );
 }
