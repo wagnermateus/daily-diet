@@ -1,4 +1,4 @@
-import { Image, SectionList, View, Text } from "react-native";
+import { Image, SectionList, View, Text, Alert } from "react-native";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
 
@@ -15,10 +15,11 @@ import { Percentage } from "../../components/Percentage";
 import { Button } from "../../components/Button";
 import { Plus } from "phosphor-react-native";
 import { useTheme } from "styled-components/native";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { MealCard } from "../../components/MealCard";
 import { DateOfMeals } from "../../components/DateOfMeals";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { mealGetAll } from "../../storage/Meal/mealGetAll";
 
 type MealsProps = {
   date: string;
@@ -28,63 +29,26 @@ type MealsProps = {
     isOnTheDiet: boolean;
   }[];
 }[];
-
 export function Home() {
   const { COLORS } = useTheme();
   const navigation = useNavigation();
-  const [meals, setMeals] = useState<MealsProps>([
-    {
-      date: "10.04.23",
-      data: [
-        {
-          hour: "12:00",
-          isOnTheDiet: true,
-          name: "Funge com peito alto",
-        },
-        {
-          hour: "14:00",
-          isOnTheDiet: false,
-          name: "Frango grelhado",
-        },
-      ],
-    },
-    {
-      date: "12.04.23",
-      data: [
-        {
-          hour: "08:00",
-          isOnTheDiet: true,
-          name: "Pão com manteiga",
-        },
-        {
-          hour: "13:00",
-          isOnTheDiet: true,
-          name: "Caldeirada",
-        },
-      ],
-    },
-    {
-      date: "13.04.23",
-      data: [
-        {
-          hour: "08:00",
-          isOnTheDiet: false,
-          name: "Leite sem açucar",
-        },
-        {
-          hour: "13:00",
-          isOnTheDiet: false,
-          name: "Feijão com banana",
-        },
-        {
-          hour: "15:00",
-          isOnTheDiet: true,
-          name: "Galinha rija",
-        },
-      ],
-    },
-  ]);
+  const [meals, setMeals] = useState<MealsProps>([]);
   const [isOnTheDiet, setIsOnTheDiet] = useState(true);
+
+  async function fetchMeals() {
+    try {
+      const data = await mealGetAll();
+      setMeals(data);
+    } catch (error) {
+      Alert.alert("Não foi possível carregar as refeições");
+      console.log(error);
+    }
+  }
+  useFocusEffect(
+    useCallback(() => {
+      fetchMeals();
+    }, [])
+  );
   return (
     <Container>
       <Header>

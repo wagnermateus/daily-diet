@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, View } from "react-native";
+import { Alert, Pressable, ScrollView, View } from "react-native";
 import { Input } from "../../components/Input";
 import {
   Container,
@@ -19,8 +19,11 @@ import { Text } from "react-native";
 import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBall } from "../../components/StatusBall";
+import { mealCreate } from "../../storage/Meal/mealCreate";
 
 export function DescribeMeal() {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
   const [hour, setHour] = useState(new Date());
   const [mealDate, setMealDate] = useState(format(date, "dd.MM.yyyy"));
@@ -29,7 +32,7 @@ export function DescribeMeal() {
   );
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showHourPicker, setShowHourPicker] = useState(false);
-  const [isOnTheDiet, setIsOnTheDiet] = useState<boolean>();
+  const [isOnTheDiet, setIsOnTheDiet] = useState<boolean>(true);
 
   const { COLORS } = useTheme();
   const navigation = useNavigation();
@@ -63,14 +66,26 @@ export function DescribeMeal() {
     }
   };
 
+  async function handleAddMeal() {
+    try {
+      const newMeal = { name, description, hour: mealHour, isOnTheDiet };
+
+      await mealCreate(newMeal, mealDate);
+      navigation.navigate("home");
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Não foi possível adicionar a refeição!");
+    }
+  }
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Container>
         <MealHeader title="Nova Refeição" />
 
         <Content>
-          <Input label="Nome" height={48} />
-          <Input label="Descrição" height={120} />
+          <Input label="Nome" height={48} onChangeText={setName} />
+          <Input label="Descrição" height={120} onChangeText={setDescription} />
           <DateTime>
             {showDatePicker && (
               <DateTimePicker
@@ -136,10 +151,7 @@ export function DescribeMeal() {
               </RadioButton>
             </RadioButtons>
           </View>
-          <Button
-            title="Cadastrar refeição"
-            onPress={() => navigation.navigate("feedback")}
-          />
+          <Button title="Cadastrar refeição" onPress={handleAddMeal} />
         </Content>
       </Container>
     </ScrollView>
