@@ -8,7 +8,9 @@ export declare global {
         | {
             mealData: string;
           };
-      feedback: undefined;
+      feedback: {
+        isOnTheDiet: boolean;
+      };
       meal: {
         name: string;
       };

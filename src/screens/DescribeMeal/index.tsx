@@ -20,6 +20,7 @@ import { useTheme } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBall } from "../../components/StatusBall";
 import { mealCreate } from "../../storage/Meal/mealCreate";
+import { Loading } from "../../components/Loading";
 
 export function DescribeMeal() {
   const [name, setName] = useState("");
@@ -27,6 +28,7 @@ export function DescribeMeal() {
   const [date, setDate] = useState(new Date());
   const [hour, setHour] = useState(new Date());
   const [mealDate, setMealDate] = useState(format(date, "dd.MM.yyyy"));
+  const [isLoading, setIsLoading] = useState(false);
   const [mealHour, setMealHour] = useState(
     `${hour.getHours()}:${hour.getMinutes()}`
   );
@@ -67,17 +69,28 @@ export function DescribeMeal() {
   };
 
   async function handleAddMeal() {
+    if (name.trim().length < 2) {
+      return Alert.alert("Cadastrar refeição", "Informe a refeição");
+    }
+    if (name.trim().length < 2) {
+      return Alert.alert("Cadastrar refeição", "Dê uma descrição");
+    }
     try {
+      setIsLoading(true);
       const newMeal = { name, description, hour: mealHour, isOnTheDiet };
 
       await mealCreate(newMeal, mealDate);
-      navigation.navigate("home");
+      navigation.navigate("feedback", { isOnTheDiet });
     } catch (error) {
       console.log(error);
       Alert.alert("Não foi possível adicionar a refeição!");
+    } finally {
+      setIsLoading(false);
     }
   }
-
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Container>

@@ -20,6 +20,7 @@ import { MealCard } from "../../components/MealCard";
 import { DateOfMeals } from "../../components/DateOfMeals";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { mealGetAll } from "../../storage/Meal/mealGetAll";
+import { Loading } from "../../components/Loading";
 
 type MealsProps = {
   date: string;
@@ -34,14 +35,18 @@ export function Home() {
   const navigation = useNavigation();
   const [meals, setMeals] = useState<MealsProps>([]);
   const [isOnTheDiet, setIsOnTheDiet] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function fetchMeals() {
     try {
+      setIsLoading(true);
       const data = await mealGetAll();
       setMeals(data);
     } catch (error) {
       Alert.alert("Não foi possível carregar as refeições");
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }
   useFocusEffect(
@@ -49,6 +54,10 @@ export function Home() {
       fetchMeals();
     }, [])
   );
+
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <Container>
       <Header>

@@ -1,14 +1,24 @@
-import { useState } from "react";
 import { BoldText, Container, Subtitle, Title } from "./styles";
 import { Image } from "react-native";
 import positiveFeedbackIllustration from "../../assets/positiveFeedbackIllustration.png";
 import negativeFeedbackIllustration from "../../assets/negativeFeedbackIllustration.png";
 import { Button } from "../../components/Button";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { Loading } from "../../components/Loading";
+
+type RouteParams = {
+  isOnTheDiet: boolean;
+};
 
 export function Feedback() {
-  const [isOnTheDiet, setIsOnTheDiet] = useState(true);
+  const route = useRoute();
   const navigation = useNavigation();
+
+  const { isOnTheDiet } = route.params as RouteParams;
+
+  if (isOnTheDiet === undefined) {
+    return <Loading />;
+  }
   return (
     <Container>
       {isOnTheDiet ? (
