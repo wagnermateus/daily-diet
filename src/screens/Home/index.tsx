@@ -21,20 +21,12 @@ import { DateOfMeals } from "../../components/DateOfMeals";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { mealGetAll } from "../../storage/Meal/mealGetAll";
 import { Loading } from "../../components/Loading";
+import { MealStorageDTO } from "../../storage/Meal/MealStorageDTO";
 
-type MealsProps = {
-  date: string;
-  data: {
-    name: string;
-    hour: string;
-    isOnTheDiet: boolean;
-    description: string;
-  }[];
-}[];
 export function Home() {
   const { COLORS } = useTheme();
   const navigation = useNavigation();
-  const [meals, setMeals] = useState<MealsProps>([]);
+  const [meals, setMeals] = useState<MealStorageDTO>([]);
   const [isOnTheDiet, setIsOnTheDiet] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -43,6 +35,8 @@ export function Home() {
       setIsLoading(true);
       const data = await mealGetAll();
       setMeals(data);
+      // await AsyncStorage.removeItem(MEAL_COLLECTION);
+      console.log(meals);
     } catch (error) {
       Alert.alert("Não foi possível carregar as refeições");
       console.log(error);

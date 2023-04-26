@@ -18,8 +18,9 @@ import {
   StoredMealProps,
   mealGetByName,
 } from "../../storage/Meal/mealGetByName";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Loading } from "../../components/Loading";
+import { mealDeleteByName } from "../../storage/Meal/mealDeleteByName";
 
 type RouteParams = {
   name: string;
@@ -29,6 +30,7 @@ export function Meal() {
   const [meal, setMeal] = useState<StoredMealProps>();
   const [isLoading, setIsLoading] = useState(false);
   const { COLORS } = useTheme();
+  const navigation = useNavigation();
   const route = useRoute();
   const { name } = route.params as RouteParams;
 
@@ -44,7 +46,20 @@ export function Meal() {
       setIsLoading(false);
     }
   }
-  console.log(meal);
+
+  async function handleRemoveMeal() {
+    try {
+      setIsLoading(true);
+      await mealDeleteByName(meal!.data.name);
+      navigation.navigate("home");
+    } catch (error) {
+      Alert.alert("Refeição", "Não foi possível deletar a refeição.");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     fecthMeal();
   }, []);
@@ -78,6 +93,7 @@ export function Meal() {
             title="Excluir refeição"
             type="Secondary"
             icon={<Trash size={18} color={COLORS.gray_100} />}
+            onPress={handleRemoveMeal}
           />
         </View>
       </Content>
