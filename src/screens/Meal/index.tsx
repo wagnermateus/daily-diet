@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MealHeader } from "../../components/MealHeader";
 import {
   Container,
@@ -13,26 +13,58 @@ import { Button } from "../../components/Button";
 import { PencilSimpleLine, Trash } from "phosphor-react-native";
 import { useTheme } from "styled-components/native";
 import { StatusBall } from "../../components/StatusBall";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
+import {
+  StoredMealProps,
+  mealGetByName,
+} from "../../storage/Meal/mealGetByName";
+import { useRoute } from "@react-navigation/native";
+import { Loading } from "../../components/Loading";
+
+type RouteParams = {
+  name: string;
+};
 
 export function Meal() {
-  const [isOnTheDiet, setIsOnTheDiet] = useState(false);
+  const [meal, setMeal] = useState<StoredMealProps>();
+  const [isLoading, setIsLoading] = useState(false);
   const { COLORS } = useTheme();
+  const route = useRoute();
+  const { name } = route.params as RouteParams;
+
+  async function fecthMeal() {
+    try {
+      setIsLoading(true);
+      const data = await mealGetByName(name);
+      setMeal(data);
+    } catch (error) {
+      Alert.alert("Refeição", "Não foi possível apresentar os dados.");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  console.log(meal);
+  useEffect(() => {
+    fecthMeal();
+  }, []);
+
+  if (isLoading || meal === undefined) {
+    return <Loading />;
+  }
   return (
-    <Container isOnTheDiet={isOnTheDiet}>
+    <Container isOnTheDiet={meal.data.isOnTheDiet}>
       <MealHeader title="Refeição" />
       <Content>
         <MealInfo>
-          <Title>Sanduíche</Title>
-          <Description>
-            Sanduíche de pão integral com atum e salada de alface e tomate
-          </Description>
+          <Title>{meal.data.name}</Title>
+          <Description>{meal.data.description}</Description>
           <Subtitle>Data e hora</Subtitle>
-          <Description>12/08/2022 às 16:00</Description>
+          <Description>{`${meal.date} às ${meal.data.hour}`} </Description>
           <StatusBox>
-            <StatusBall isOnTheDiet={isOnTheDiet} />
+            <StatusBall isOnTheDiet={meal.data.isOnTheDiet} />
             <Description>
-              {isOnTheDiet ? "dentro da dieta" : "fora da dieta"}
+              {meal.data.isOnTheDiet ? "dentro da dieta" : "fora da dieta"}
             </Description>
           </StatusBox>
         </MealInfo>

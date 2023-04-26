@@ -28,6 +28,7 @@ type MealsProps = {
     name: string;
     hour: string;
     isOnTheDiet: boolean;
+    description: string;
   }[];
 }[];
 export function Home() {
