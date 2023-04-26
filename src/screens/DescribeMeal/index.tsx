@@ -23,6 +23,9 @@ import { mealCreate } from "../../storage/Meal/mealCreate";
 import { Loading } from "../../components/Loading";
 
 export function DescribeMeal() {
+  const formatTime = (time: number) => {
+    return time < 10 ? `0${time}` : time;
+  };
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
@@ -30,7 +33,7 @@ export function DescribeMeal() {
   const [mealDate, setMealDate] = useState(format(date, "dd.MM.yyyy"));
   const [isLoading, setIsLoading] = useState(false);
   const [mealHour, setMealHour] = useState(
-    `${hour.getHours()}:${hour.getMinutes()}`
+    `${formatTime(hour.getHours())}:${formatTime(hour.getMinutes())}`
   );
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showHourPicker, setShowHourPicker] = useState(false);
@@ -62,7 +65,11 @@ export function DescribeMeal() {
     if (type === "set") {
       toggleHourPicker();
       setHour(selectedHour!);
-      setMealHour(`${selectedHour!.getHours()}:${selectedHour!.getMinutes()}`);
+      setMealHour(
+        `${formatTime(selectedHour!.getHours())}:${formatTime(
+          selectedHour!.getMinutes()
+        )}`
+      );
     } else {
       toggleHourPicker();
     }
