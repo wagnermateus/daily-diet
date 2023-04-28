@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { mealGetAll } from "./mealGetAll";
 import { MEAL_COLLECTION } from "../storageConfig";
+import { AppError } from "../../utils/AppError";
 
 type Props = {
   name: string;
@@ -15,6 +16,14 @@ export async function mealCreate(
 ) {
   try {
     const stored = await mealGetAll();
+
+    const mealAlreadyExists = stored.some((item) =>
+      item.data.find((item) => item.name === name)
+    );
+
+    if (mealAlreadyExists) {
+      throw new AppError("Já adicionou esta refeição à lista.");
+    }
 
     const newMealDateAlreadyExists = stored.filter(
       (meal) => meal.date === date

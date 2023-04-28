@@ -26,6 +26,7 @@ import {
   mealGetByName,
 } from "../../storage/Meal/mealGetByName";
 import { mealUpdate } from "../../storage/Meal/mealUpdate";
+import { AppError } from "../../utils/AppError";
 
 type RouteParams = {
   mealName: string;
@@ -104,8 +105,12 @@ export function DescribeMeal() {
       await mealCreate(newMeal, mealDate);
       navigation.navigate("feedback", { isOnTheDiet });
     } catch (error) {
-      console.log(error);
-      Alert.alert("Não foi possível adicionar a refeição!");
+      if (error instanceof AppError) {
+        Alert.alert("Cadastrar refeição", error.message);
+      } else {
+        console.log(error);
+        Alert.alert("Não foi possível adicionar a refeição!");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -136,7 +141,11 @@ export function DescribeMeal() {
       );
       navigation.navigate("home");
     } catch (error) {
-      Alert.alert("Actualizar ");
+      if (error instanceof AppError) {
+        Alert.alert("Editar refeição", error.message);
+      } else {
+        Alert.alert("Actualizar ");
+      }
       console.log(error);
     } finally {
       setIsLoading(false);
