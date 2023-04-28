@@ -27,9 +27,11 @@ export function Home() {
   const { COLORS } = useTheme();
   const navigation = useNavigation();
   const [meals, setMeals] = useState<MealStorageDTO>([]);
+  const [totalMeals, setTotalMeals] = useState(0);
+  const [totalMealsOnTheDiet, setTotalMealsOnTheDiet] = useState(0);
   const [isOnTheDiet, setIsOnTheDiet] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [percentage, setPercentage] = useState(0);
   async function fetchMeals() {
     try {
       setIsLoading(true);
@@ -42,9 +44,46 @@ export function Home() {
       setIsLoading(false);
     }
   }
+  async function calculateThePercentage() {
+    const meals = await mealGetAll();
+
+    const totalNumberOfMealsInTheDiet = meals.reduce(
+      (accumulator, item) => {
+        item.data.map((item) => {
+          if (item.isOnTheDiet === true) {
+            accumulator.total += 1;
+          }
+        });
+
+        return accumulator;
+      },
+      { total: 0 }
+    );
+
+    const totalMeals = meals.reduce(
+      (accumulator, item) => {
+        accumulator.total += item.data.length;
+        return accumulator;
+      },
+      { total: 0 }
+    );
+
+    const divisionResult = totalNumberOfMealsInTheDiet.total / totalMeals.total;
+
+    const percentageValue = divisionResult * 100;
+
+    setPercentage(Math.trunc(percentageValue));
+
+    const checkIfIsOnTheDiet = percentageValue > 70 ? true : false;
+
+    setIsOnTheDiet(checkIfIsOnTheDiet);
+    setTotalMeals(totalMeals.total);
+    setTotalMealsOnTheDiet(totalNumberOfMealsInTheDiet.total);
+  }
   useFocusEffect(
     useCallback(() => {
       fetchMeals();
+      calculateThePercentage();
     }, [])
   );
 
@@ -59,10 +98,17 @@ export function Home() {
       </Header>
       <StatisticsCard
         isOnTheDiet={isOnTheDiet}
-        onPress={() => navigation.navigate("statistics")}
+        onPress={() =>
+          navigation.navigate("statistics", {
+            totalMeals: totalMeals,
+            percentage: percentage,
+            totalMealsOnTheDiet: totalMealsOnTheDiet,
+            isOnTheDiet: isOnTheDiet,
+          })
+        }
       >
         <Icon color={isOnTheDiet ? COLORS.green_dark : COLORS.red_dark} />
-        <Percentage />
+        <Percentage percentageValue={percentage} />
       </StatisticsCard>
       <Meals>
         <Title>Refeições</Title>
