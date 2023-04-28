@@ -47,7 +47,7 @@ export function Meal() {
     }
   }
 
-  async function handleRemoveMeal() {
+  async function mealRemove() {
     try {
       setIsLoading(true);
       await mealDeleteByName(meal!.data.name);
@@ -58,6 +58,12 @@ export function Meal() {
     } finally {
       setIsLoading(false);
     }
+  }
+  function handleMealRemove() {
+    Alert.alert("", "Deseja realmente excluir o registo da refeição?", [
+      { text: "Cancelar", style: "cancel" },
+      { text: "Sim, excluir", onPress: () => mealRemove() },
+    ]);
   }
 
   useEffect(() => {
@@ -96,7 +102,7 @@ export function Meal() {
             title="Excluir refeição"
             type="Secondary"
             icon={<Trash size={18} color={COLORS.gray_100} />}
-            onPress={handleRemoveMeal}
+            onPress={handleMealRemove}
           />
         </View>
       </Content>

@@ -62,7 +62,7 @@ export function Home() {
         onPress={() => navigation.navigate("statistics")}
       >
         <Icon color={isOnTheDiet ? COLORS.green_dark : COLORS.red_dark} />
-        <Percentage percentageValue={98.87} />
+        <Percentage />
       </StatisticsCard>
       <Meals>
         <Title>Refeições</Title>
