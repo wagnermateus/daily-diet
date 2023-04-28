@@ -32,6 +32,7 @@ export function Home() {
   const [isOnTheDiet, setIsOnTheDiet] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [percentage, setPercentage] = useState(0);
+
   async function fetchMeals() {
     try {
       setIsLoading(true);
@@ -44,42 +45,53 @@ export function Home() {
       setIsLoading(false);
     }
   }
+
   async function calculateThePercentage() {
-    const meals = await mealGetAll();
+    try {
+      setIsLoading(true);
+      const meals = await mealGetAll();
 
-    const totalNumberOfMealsInTheDiet = meals.reduce(
-      (accumulator, item) => {
-        item.data.map((item) => {
-          if (item.isOnTheDiet === true) {
-            accumulator.total += 1;
-          }
-        });
+      const totalNumberOfMealsInTheDiet = meals.reduce(
+        (accumulator, item) => {
+          item.data.map((item) => {
+            if (item.isOnTheDiet === true) {
+              accumulator.total += 1;
+            }
+          });
 
-        return accumulator;
-      },
-      { total: 0 }
-    );
+          return accumulator;
+        },
+        { total: 0 }
+      );
 
-    const totalMeals = meals.reduce(
-      (accumulator, item) => {
-        accumulator.total += item.data.length;
-        return accumulator;
-      },
-      { total: 0 }
-    );
+      const totalMeals = meals.reduce(
+        (accumulator, item) => {
+          accumulator.total += item.data.length;
+          return accumulator;
+        },
+        { total: 0 }
+      );
 
-    const divisionResult = totalNumberOfMealsInTheDiet.total / totalMeals.total;
+      const divisionResult =
+        totalNumberOfMealsInTheDiet.total / totalMeals.total;
 
-    const percentageValue = divisionResult * 100;
+      const percentageValue = divisionResult * 100;
 
-    setPercentage(Math.trunc(percentageValue));
+      setPercentage(Math.trunc(percentageValue));
 
-    const checkIfIsOnTheDiet = percentageValue > 70 ? true : false;
+      const checkIfIsOnTheDiet = percentageValue > 70 ? true : false;
 
-    setIsOnTheDiet(checkIfIsOnTheDiet);
-    setTotalMeals(totalMeals.total);
-    setTotalMealsOnTheDiet(totalNumberOfMealsInTheDiet.total);
+      setIsOnTheDiet(checkIfIsOnTheDiet);
+      setTotalMeals(totalMeals.total);
+      setTotalMealsOnTheDiet(totalNumberOfMealsInTheDiet.total);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Não foi possível apresentar a percentagem.");
+    } finally {
+      setIsLoading(false);
+    }
   }
+
   useFocusEffect(
     useCallback(() => {
       fetchMeals();
