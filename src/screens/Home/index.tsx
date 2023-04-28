@@ -35,8 +35,6 @@ export function Home() {
       setIsLoading(true);
       const data = await mealGetAll();
       setMeals(data);
-      // await AsyncStorage.removeItem(MEAL_COLLECTION);
-      console.log(meals);
     } catch (error) {
       Alert.alert("Não foi possível carregar as refeições");
       console.log(error);
@@ -72,7 +70,7 @@ export function Home() {
           title="Nova refeição"
           type="Primary"
           icon={<Plus size={18} color={COLORS.WHITE} />}
-          onPress={() => navigation.navigate("describe")}
+          onPress={() => navigation.navigate("describe", { mealName: "" })}
         />
         <MealsList>
           <SectionList

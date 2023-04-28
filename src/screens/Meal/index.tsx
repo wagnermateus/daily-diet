@@ -87,6 +87,9 @@ export function Meal() {
           <Button
             title="Editar refeição"
             icon={<PencilSimpleLine size={18} color={COLORS.WHITE} />}
+            onPress={() =>
+              navigation.navigate("describe", { mealName: meal.data.name })
+            }
           />
 
           <Button

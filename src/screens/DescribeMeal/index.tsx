@@ -8,7 +8,7 @@ import {
   RadioButtonLabel,
   RadioButtons,
 } from "./styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -17,15 +17,33 @@ import { MealHeader } from "../../components/MealHeader";
 import { Button } from "../../components/Button";
 import { Text } from "react-native";
 import { useTheme } from "styled-components/native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { StatusBall } from "../../components/StatusBall";
 import { mealCreate } from "../../storage/Meal/mealCreate";
 import { Loading } from "../../components/Loading";
+import {
+  StoredMealProps,
+  mealGetByName,
+} from "../../storage/Meal/mealGetByName";
+import { mealUpdate } from "../../storage/Meal/mealUpdate";
+
+type RouteParams = {
+  mealName: string;
+};
 
 export function DescribeMeal() {
+  const { COLORS } = useTheme();
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  const { mealName } = route?.params as RouteParams;
+
+  const parameterWasPassed = mealName.length > 0;
+
   const formatTime = (time: number) => {
     return time < 10 ? `0${time}` : time;
   };
+  const [meal, setMeal] = useState<StoredMealProps>({} as StoredMealProps);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
@@ -38,9 +56,6 @@ export function DescribeMeal() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showHourPicker, setShowHourPicker] = useState(false);
   const [isOnTheDiet, setIsOnTheDiet] = useState<boolean>(true);
-
-  const { COLORS } = useTheme();
-  const navigation = useNavigation();
 
   function toggleDatePicker() {
     setShowDatePicker(!showDatePicker);
@@ -95,17 +110,63 @@ export function DescribeMeal() {
       setIsLoading(false);
     }
   }
+
+  async function fetchUpdateData() {
+    try {
+      setIsLoading(true);
+      const data = await mealGetByName(mealName!);
+      setName(data.data.name);
+      setDescription(data.data.description);
+      setMealHour(data.data.hour);
+      setMealDate(data.date);
+      setIsOnTheDiet(data.data.isOnTheDiet);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  async function handleUpdateMeal() {
+    try {
+      setIsLoading(true);
+      await mealUpdate(
+        { name, description, hour: mealHour, isOnTheDiet },
+        mealDate,
+        mealName
+      );
+      navigation.navigate("home");
+    } catch (error) {
+      Alert.alert("Actualizar ");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  useEffect(() => {
+    if (parameterWasPassed) {
+      fetchUpdateData();
+    }
+  }, []);
   if (isLoading) {
     return <Loading />;
   }
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Container>
-        <MealHeader title="Nova Refeição" />
+        {parameterWasPassed ? (
+          <MealHeader title="Editar refeição" />
+        ) : (
+          <MealHeader title="Nova refeição" />
+        )}
 
         <Content>
-          <Input label="Nome" height={48} onChangeText={setName} />
-          <Input label="Descrição" height={120} onChangeText={setDescription} />
+          <Input label="Nome" height={48} onChangeText={setName} value={name} />
+          <Input
+            label="Descrição"
+            height={120}
+            onChangeText={setDescription}
+            value={description}
+          />
           <DateTime>
             {showDatePicker && (
               <DateTimePicker
@@ -171,7 +232,11 @@ export function DescribeMeal() {
               </RadioButton>
             </RadioButtons>
           </View>
-          <Button title="Cadastrar refeição" onPress={handleAddMeal} />
+          {parameterWasPassed ? (
+            <Button title="Salvar alterações" onPress={handleUpdateMeal} />
+          ) : (
+            <Button title="Cadastrar refeição " onPress={handleAddMeal} />
+          )}
         </Content>
       </Container>
     </ScrollView>
