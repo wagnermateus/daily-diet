@@ -14,7 +14,6 @@ import { useTheme } from "styled-components/native";
 import { useEffect, useState } from "react";
 import { StatisticsData } from "../../components/StatisticsData";
 import { mealGetAll } from "../../storage/Meal/mealGetAll";
-import { MealStorageDTO } from "../../storage/Meal/MealStorageDTO";
 import { Loading } from "../../components/Loading";
 
 type RouteParams = {
@@ -33,6 +32,8 @@ export function Statistics() {
     useState(0);
   const [totalMeals, setTotalMeals] = useState(0);
   const [totalOffDietMeals, setTotalOffDietMeals] = useState(0);
+  const [betterSequence, setBetterSequence] = useState(0);
+
   async function calculateStatistics() {
     try {
       setIsLoading(true);
@@ -64,6 +65,30 @@ export function Statistics() {
       const totalOffDietMeals =
         totalMeals.total - totalNumberOfMealsInTheDiet.total;
       setTotalOffDietMeals(totalOffDietMeals);
+
+      let accumulator = 0;
+      let betterSequence = 0;
+
+      const calculateBetterSequence = () => {
+        for (let i = 0; i < meals.length; i++) {
+          for (let x = 0; x < meals[i].data.length; x++) {
+            if (meals[i].data[x].isOnTheDiet === true) {
+              accumulator += 1;
+            } else {
+              if (accumulator > betterSequence) {
+                betterSequence = accumulator;
+                accumulator = 0;
+              }
+            }
+          }
+        }
+        if (accumulator > betterSequence) {
+          betterSequence = accumulator;
+          accumulator = 0;
+        }
+        setBetterSequence(betterSequence);
+      };
+      calculateBetterSequence();
     } catch (error) {
       console.log(error);
       Alert.alert("Não foi possível apresentar as estatísticas.");
@@ -90,7 +115,7 @@ export function Statistics() {
         <DataContainer>
           <DataContent>
             <StatisticsData
-              value={22}
+              value={betterSequence}
               description="melhor sequência de pratos dentro da dieta"
             />
           </DataContent>
