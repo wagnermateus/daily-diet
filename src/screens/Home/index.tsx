@@ -27,11 +27,9 @@ export function Home() {
   const { COLORS } = useTheme();
   const navigation = useNavigation();
   const [meals, setMeals] = useState<MealStorageDTO>([]);
-  const [totalMeals, setTotalMeals] = useState(0);
-  const [totalMealsOnTheDiet, setTotalMealsOnTheDiet] = useState(0);
-  const [isOnTheDiet, setIsOnTheDiet] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [percentage, setPercentage] = useState(0);
+  const isOnTheDiet = percentage > 70 ? true : false;
 
   async function fetchMeals() {
     try {
@@ -78,12 +76,6 @@ export function Home() {
       const percentageValue = divisionResult * 100;
 
       setPercentage(Math.trunc(percentageValue));
-
-      const checkIfIsOnTheDiet = percentageValue > 70 ? true : false;
-
-      setIsOnTheDiet(checkIfIsOnTheDiet);
-      setTotalMeals(totalMeals.total);
-      setTotalMealsOnTheDiet(totalNumberOfMealsInTheDiet.total);
     } catch (error) {
       console.log(error);
       Alert.alert("Não foi possível apresentar a percentagem.");
@@ -112,9 +104,7 @@ export function Home() {
         isOnTheDiet={isOnTheDiet}
         onPress={() =>
           navigation.navigate("statistics", {
-            totalMeals: totalMeals,
             percentage: percentage,
-            totalMealsOnTheDiet: totalMealsOnTheDiet,
             isOnTheDiet: isOnTheDiet,
           })
         }

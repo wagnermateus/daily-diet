@@ -3,9 +3,7 @@ export declare global {
     interface RootParamList {
       home: undefined;
       statistics: {
-        totalMeals: number;
         percentage: number;
-        totalMealsOnTheDiet: number;
         isOnTheDiet: boolean;
       };
       describe: {
